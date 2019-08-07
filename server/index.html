@@ -2,19 +2,22 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
 
 <body>
-    <div id="root">
-        <%- reactComponents %>
-    </div>
-    <% files.forEach(function(file){ %>
-        <script src="<%= file %>"></script>
-    <% }) %>
+  <div id="root">
+    <%- reactComponents %>
+  </div>
+  <script>
+    window.__ssr__ = <%- ssrData %>
+  </script>
+  <% files.forEach(function(file){ %>
+  <script src="<%= file %>"></script>
+  <% }) %>
 </body>
 
 </html>

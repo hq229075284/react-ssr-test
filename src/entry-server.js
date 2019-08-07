@@ -1,2 +1,2 @@
-import app from './app'
-export default app
+import * as generateApp from './generate'
+export default generateApp

@@ -6,9 +6,10 @@
   "scripts": {
     "client": "webpack-dev-server --config ./webpack.client.config.js",
     "client:build": "cross-env NODE_ENV=production webpack --config ./webpack.client.config.js",
+    "server:build": "webpack --config ./webpack.server.config.js",
+    "build": "concurrently \"npm run client:build\" \"npm run server:build\"",
     "server:watch": "nodemon -w ./dist_server ./dist_server/index.js",
     "server:compile": "babel -w --config-file ./babel.config.js ./server -d ./dist_server",
-    "server:build": "webpack --config ./webpack.server.config.js",
     "server": "concurrently \"npm run server:watch\" \"npm run server:webpack\""
   },
   "keywords": [],
@@ -21,7 +22,9 @@
     "koa-static": "^5.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.1"
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

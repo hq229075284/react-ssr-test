@@ -1,4 +1,4 @@
-import React from "react";
 import { hydrate } from "react-dom";
-import App from "./app";
-hydrate(<App />, document.getElementById("root"));
+import { createApp, createStore } from "./generate";
+const store = createStore(window.__ssr__)
+hydrate(createApp(store), document.getElementById("root"));
