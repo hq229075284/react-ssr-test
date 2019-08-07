@@ -1,0 +1,46 @@
+{
+  "name": "ssr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "webpack-dev-server --config ./webpack.client.config.js",
+    "client:build": "cross-env NODE_ENV=production webpack --config ./webpack.client.config.js",
+    "server:watch": "nodemon -w ./dist_server ./dist_server/index.js",
+    "server:compile": "babel -w --config-file ./babel.config.js ./server -d ./dist_server",
+    "server:build": "webpack --config ./webpack.server.config.js",
+    "server": "concurrently \"npm run server:watch\" \"npm run server:webpack\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^2.6.9",
+    "ejs": "^2.6.2",
+    "koa": "^2.7.0",
+    "koa-static": "^5.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "concurrently": "^4.1.1",
+    "cross-env": "^5.2.0",
+    "css-loader": "^3.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "koa-webpack": "^5.2.4",
+    "nodemon": "^1.19.1",
+    "sass-loader": "^7.1.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
