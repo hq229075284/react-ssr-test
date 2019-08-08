@@ -24,14 +24,14 @@ module.exports = {
     port: 3000
   },
   plugins: [
-      new CleanWebpackPlugin({
-        verbose:true
-      }),
-      new htmlWebpackPlugin({
-        template: path.join(__dirname, "./index.html"),
-        inject:true,
-        filename:'../index.html'
-      })
+    new CleanWebpackPlugin({
+      verbose: true
+    }),
+    new htmlWebpackPlugin({
+      template: path.join(__dirname, "./index.html"),
+      inject: true,
+      filename: '../index.html'
+    })
   ]
 };
 

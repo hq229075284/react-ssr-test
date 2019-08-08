@@ -14,7 +14,7 @@ const fs = require('fs')
 const app = new Koa()
 
 const ReactDOMServer = require('react-dom/server');
-const { createStore, createApp, createStaticRouter } = require('../dist/server/index').default
+const { createStore, createWrapperWithApp } = require('../dist/server/index')
 
 function getData() {
   return new Promise(resolve => {
@@ -41,8 +41,14 @@ app.use(async function (ctx) {
       saveData: serverData
     })
     let html = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
+    const modules = []
     html = html
-      .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(createApp(store, createStaticRouter(ctx.req))))
+      .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(createWrapperWithApp({
+        store,
+        modules,
+        req: ctx.req,
+        statsFile: path.join(__dirname, '../dist/loadable-stats.json')
+      })))
       .replace('<!-- ssrData -->', JSON.stringify({ saveData: serverData }))
 
     ctx.status = 200

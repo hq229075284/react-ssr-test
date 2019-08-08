@@ -4,6 +4,7 @@ const path = require("path");
 // const ejs = require("ejs");
 const nodeExternals = require("webpack-node-externals");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const LoadablePlugin = require('@loadable/webpack-plugin')
 
 module.exports = {
   target: "node",
@@ -12,8 +13,8 @@ module.exports = {
   output: {
     path: path.join(__dirname, "./dist/server"),
     filename: "[name].js",
-    libraryTarget: "commonjs2"
-    // publicPath:'/'
+    libraryTarget: "commonjs2",
+    // publicPath:'/server'
   },
   module: {
     rules: [{ test: /\.js$/, loader: "babel-loader", exclude: /node_modules/ }]
@@ -23,6 +24,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({
         verbose: true
+    }),
+    new LoadablePlugin({
+      filename:'../loadable-stats.json',
+      writeToDisk:true
     })
   ]
 };
