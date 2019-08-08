@@ -14,7 +14,7 @@ const fs = require('fs')
 const app = new Koa()
 
 const ReactDOMServer = require('react-dom/server');
-const { createStore, createApp } = require('../dist/server/index').default
+const { createStore, createApp, createStaticRouter } = require('../dist/server/index').default
 
 function getData() {
   return new Promise(resolve => {
@@ -42,7 +42,7 @@ app.use(async function (ctx) {
     })
     let html = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
     html = html
-      .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(createApp(store)))
+      .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(createApp(store, createStaticRouter(ctx.req))))
       .replace('<!-- ssrData -->', JSON.stringify({ saveData: serverData }))
 
     ctx.status = 200
