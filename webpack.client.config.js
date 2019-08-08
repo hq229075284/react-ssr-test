@@ -8,7 +8,7 @@ module.exports = {
     index: path.join(__dirname, "./src/entry-client.js")
   },
   output: {
-    path: path.join(__dirname, "./dist_client"),
+    path: path.join(__dirname, "./dist/client"),
     filename: "[name].js"
   },
   module: {
@@ -26,13 +26,19 @@ module.exports = {
   plugins: [
       new CleanWebpackPlugin({
         verbose:true
+      }),
+      new htmlWebpackPlugin({
+        template: path.join(__dirname, "./index.html"),
+        inject:true,
+        filename:'../index.html'
       })
   ]
 };
-if (NODE_ENV !== "production") {
-  module.exports.plugins.push(
-    new htmlWebpackPlugin({
-      template: path.join(__dirname, "./client/index.html")
-    })
-  );
-}
+
+// if (NODE_ENV !== "production") {
+//   module.exports.plugins.push(
+//     new htmlWebpackPlugin({
+//       template: path.join(__dirname, "./index.html")
+//     })
+//   );
+// }

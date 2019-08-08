@@ -1,7 +1,7 @@
 const path = require("path");
-const fs = require("fs");
-const { writeFile } = require('./cfs')
-const ejs = require("ejs");
+// const fs = require("fs");
+// const { writeFile } = require('./cfs')
+// const ejs = require("ejs");
 const nodeExternals = require("webpack-node-externals");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
@@ -10,7 +10,7 @@ module.exports = {
   mode: "development",
   entry: { index: path.join(__dirname, "./src/entry-server.js") },
   output: {
-    path: path.join(__dirname, "./dist_server"),
+    path: path.join(__dirname, "./dist/server"),
     filename: "[name].js",
     libraryTarget: "commonjs2"
     // publicPath:'/'
@@ -21,22 +21,22 @@ module.exports = {
   devtool: "source-map",
   externals: [nodeExternals()],
   plugins: [
-    // new CleanWebpackPlugin({
-    //     verbose: true
-    // })
+    new CleanWebpackPlugin({
+        verbose: true
+    })
   ]
 };
 
-const templatePath = require.resolve("./server/index.html");
-console.log(templatePath)
-ejs.renderFile(templatePath, {
-  reactComponents: '<%- reactComponents %>',
-  ssrData: '<%- ssrData %>',
-  files: ["/dist_client/index.js"]
-}, function (err, html) {
-  if (err) throw err;
-  const target = path.join(module.exports.output.path, 'index.html')
-  writeFile(target, html).then(() => {
-    console.log('create ' + target)
-  })
-});
+// const templatePath = require.resolve("./server/index.html");
+// console.log(templatePath)
+// ejs.renderFile(templatePath, {
+//   reactComponents: '<%- reactComponents %>',
+//   ssrData: '<%- ssrData %>',
+//   files: ["/dist_client/index.js"]
+// }, function (err, html) {
+//   if (err) throw err;
+//   const target = path.join(module.exports.output.path, 'index.html')
+//   writeFile(target, html).then(() => {
+//     console.log('create ' + target)
+//   })
+// });

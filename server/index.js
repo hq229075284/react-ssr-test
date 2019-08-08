@@ -10,11 +10,11 @@ const path = require('path')
 
 const Koa = require('koa')
 const koaStatic = require('koa-static')
-const ejs = require('ejs')
+const fs = require('fs')
 const app = new Koa()
 
 const ReactDOMServer = require('react-dom/server');
-const { createStore, createApp } = require('../dist_server/index').default
+const { createStore, createApp } = require('../dist/server/index').default
 
 function getData() {
   return new Promise(resolve => {
@@ -31,29 +31,23 @@ function getData() {
 //     const middleware=await koaWP
 //     return middleware(ctx,next)
 // });
-app.use(koaStatic(path.join(__dirname, '../')))
+app.use(koaStatic(path.join(__dirname, '../dist'), {
+  defer: true
+}))
 app.use(async function (ctx) {
-  const serverData = await getData()
-  const store = createStore({
-    saveData: serverData
-  })
   if (!path.extname(ctx.url)) {
-    ejs.renderFile(
-      path.join(__dirname, '../dist_server/index.html'),
-      {
-        reactComponents: ReactDOMServer.renderToString(createApp(store)),
-        ssrData: JSON.stringify({
-          saveData: serverData
-        })
-      },
-      { debug: false },
-      function (err, html) {
-        if (err) throw err
-        ctx.status = 200
-        ctx.set('content-type', 'text/html')
-        ctx.body = html
-      }
-    )
+    const serverData = await getData()
+    const store = createStore({
+      saveData: serverData
+    })
+    let html = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
+    html = html
+      .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(createApp(store)))
+      .replace('<!-- ssrData -->', JSON.stringify({ saveData: serverData }))
+
+    ctx.status = 200
+    ctx.set('content-type', 'text/html')
+    ctx.body = html
   }
 })
 

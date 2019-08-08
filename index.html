@@ -10,14 +10,11 @@
 
 <body>
   <div id="root">
-    <%- reactComponents %>
+    <!-- reactComponents -->
   </div>
   <script>
-    window.__ssr__ = <%- ssrData %>
+    window.__ssr__ = <!-- ssrData -->
   </script>
-  <% files.forEach(function(file){ %>
-  <script src="<%= file %>"></script>
-  <% }) %>
 </body>
 
 </html>
