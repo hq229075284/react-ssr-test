@@ -14,6 +14,7 @@ const fs = require('fs')
 const app = new Koa()
 
 const ReactDOMServer = require('react-dom/server');
+const { ChunkExtractor } = require('@loadable/server')
 const { createStore, createWrapperWithApp } = require('../dist/server/index')
 
 function getData() {
@@ -42,14 +43,18 @@ app.use(async function (ctx) {
     })
     let html = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
     const modules = []
+    const extractor = new ChunkExtractor({ statsFile: path.join(__dirname, '../dist/loadable-stats.json') })
+    const jsx = createWrapperWithApp({
+      store,
+      modules,
+      req: ctx.req,
+      extractor
+    })
+    console.log(extractor.getScriptTags())
     html = html
-      .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(createWrapperWithApp({
-        store,
-        modules,
-        req: ctx.req,
-        statsFile: path.join(__dirname, '../dist/loadable-stats.json')
-      })))
+      .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(jsx))
       .replace('<!-- ssrData -->', JSON.stringify({ saveData: serverData }))
+      .replace('<!-- ssr_Scirpts -->', extractor.getScriptTags())
 
     ctx.status = 200
     ctx.set('content-type', 'text/html')

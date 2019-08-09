@@ -7,6 +7,6 @@ export { default as routes } from './routes'
 export { default as createStore } from './redux/store'
 export { actions }
 export function createApp(store, children) {
-  console.log(children)
+  // console.log(children)
   return <Provider store={store}>{children}</Provider>
 }
