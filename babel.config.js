@@ -8,7 +8,7 @@ module.exports={
             // modules:"auto",
             targets:{
                 node:true,
-                // browsers:['last 2 versions']
+                browsers:['last 2 versions']
             }
         }]
     ]

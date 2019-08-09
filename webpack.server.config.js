@@ -17,17 +17,22 @@ module.exports = {
     // publicPath:'/server'
   },
   module: {
-    rules: [{ test: /\.js$/, loader: "babel-loader", exclude: /node_modules/ }]
+    rules: [{
+      test: /\.js$/,
+      loader: "babel-loader",
+      exclude: /node_modules/,
+      // options: { ...require('./babel.config'), plugins: ["@loadable/babel-plugin"], }
+    }]
   },
   devtool: "source-map",
   externals: [nodeExternals()],
   plugins: [
     new CleanWebpackPlugin({
-        verbose: true
+      verbose: true
     }),
     new LoadablePlugin({
-      filename:'../loadable-stats.json',
-      writeToDisk:true
+      // filename:'../loadable-stats.json',
+      // writeToDisk:true
     })
   ]
 };

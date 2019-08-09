@@ -11,6 +11,12 @@ export const createWrapperWithApp = ({ extractor, req = { url: '/' }, modules = 
   </StaticRouter>))
   return jsx
 }
+
+export default function Adapter(props){
+  return createApp(props.store, <StaticRouter location={props.req.url} context={{}}>
+    {routes}
+  </StaticRouter>)
+}
 // export const createWrapperWithApp = ({ req = { url: '/' }, modules = [], store = null }) => <Loadable.Capture report={moduleName => modules.push(moduleName)}>
 //   {
 //     createApp(store, <StaticRouter location={req.url} context={{}}>

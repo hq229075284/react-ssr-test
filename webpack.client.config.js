@@ -2,6 +2,8 @@ const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { NODE_ENV } = process.env;
+const LoadablePlugin = require('@loadable/webpack-plugin')
+
 module.exports = {
   mode: "development",
   entry: {
@@ -9,7 +11,8 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, "./dist/client"),
-    filename: "[name].js"
+    filename: "[name].js",
+    publicPath:'/client/'
   },
   module: {
     rules: [
@@ -29,9 +32,10 @@ module.exports = {
     }),
     new htmlWebpackPlugin({
       template: path.join(__dirname, "./index.html"),
-      inject: true,
+      inject: false,
       filename: '../index.html'
-    })
+    }),
+    new LoadablePlugin()
   ]
 };
 

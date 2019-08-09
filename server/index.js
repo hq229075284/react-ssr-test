@@ -13,9 +13,11 @@ const koaStatic = require('koa-static')
 const fs = require('fs')
 const app = new Koa()
 
+const React = require('react')
 const ReactDOMServer = require('react-dom/server');
 const { ChunkExtractor } = require('@loadable/server')
-const { createStore, createWrapperWithApp } = require('../dist/server/index')
+// const { createStore, createWrapperWithApp } = require('../dist/server/index')
+const { default: Adapter, createStore } = require('../dist/server/index')
 
 function getData() {
   return new Promise(resolve => {
@@ -42,19 +44,25 @@ app.use(async function (ctx) {
       saveData: serverData
     })
     let html = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
-    const modules = []
-    const extractor = new ChunkExtractor({ statsFile: path.join(__dirname, '../dist/loadable-stats.json') })
-    const jsx = createWrapperWithApp({
-      store,
-      modules,
-      req: ctx.req,
-      extractor
+    // const modules = []
+    const nodeExtractor = new ChunkExtractor({
+      statsFile: path.join(__dirname, '../dist/server/loadable-stats.json'),
+      entrypoints: 'index',
+      publicPath:'./client/'
     })
-    console.log(extractor.getScriptTags())
+    // const extractor = new ChunkExtractor({ statsFile: path.join(__dirname, '../dist/loadable-stats.json') })
+    // const jsx = createWrapperWithApp({
+    //   store,
+    //   modules,
+    //   req: ctx.req,
+    //   extractor
+    // })
+    const jsx = nodeExtractor.collectChunks(React.createElement(Adapter, { store, req: ctx.req }, null))
     html = html
       .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(jsx))
       .replace('<!-- ssrData -->', JSON.stringify({ saveData: serverData }))
-      .replace('<!-- ssr_Scirpts -->', extractor.getScriptTags())
+      .replace('<!-- ssr_Scirpts -->', nodeExtractor.getScriptTags())
+    // console.log(nodeExtractor.getScriptTags())
 
     ctx.status = 200
     ctx.set('content-type', 'text/html')
