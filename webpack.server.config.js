@@ -5,6 +5,9 @@ const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const LoadablePlugin = require('@loadable/webpack-plugin')
+const { NODE_ENV } = process.env;
+const isHMR = NODE_ENV !== 'production'
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   target: "node",
@@ -22,6 +25,12 @@ module.exports = {
       loader: "babel-loader",
       exclude: /node_modules/,
       // options: { ...require('./babel.config'), plugins: ["@loadable/babel-plugin"], }
+    },{
+      test: /\.(scss|sass)$/, use: [
+        { loader: MiniCssExtractPlugin.loader, options: { hmr: isHMR } },
+        "css-loader",
+        "sass-loader"
+      ]
     }]
   },
   devtool: "source-map",
@@ -33,7 +42,11 @@ module.exports = {
     new LoadablePlugin({
       // filename:'../loadable-stats.json',
       // writeToDisk:true
-    })
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: 'chunk.[name].css',
+    }),
   ]
 };
 

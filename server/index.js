@@ -45,11 +45,13 @@ app.use(async function (ctx) {
     })
     let html = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
     // const modules = []
+
     const nodeExtractor = new ChunkExtractor({
       statsFile: path.join(__dirname, '../dist/server/loadable-stats.json'),
       entrypoints: 'index',
-      publicPath:'./client/'
+      publicPath: './client/'
     })
+
     // const extractor = new ChunkExtractor({ statsFile: path.join(__dirname, '../dist/loadable-stats.json') })
     // const jsx = createWrapperWithApp({
     //   store,
@@ -62,6 +64,8 @@ app.use(async function (ctx) {
       .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(jsx))
       .replace('<!-- ssrData -->', JSON.stringify({ saveData: serverData }))
       .replace('<!-- ssr_Scirpts -->', nodeExtractor.getScriptTags())
+      .replace('<!-- ssr_Css -->', nodeExtractor.getStyleTags())
+    // console.log(html)
     // console.log(nodeExtractor.getScriptTags())
 
     ctx.status = 200

@@ -3,6 +3,8 @@ const htmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { NODE_ENV } = process.env;
 const LoadablePlugin = require('@loadable/webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const isHMR = NODE_ENV !== 'production'
 
 module.exports = {
   mode: "development",
@@ -12,13 +14,19 @@ module.exports = {
   output: {
     path: path.join(__dirname, "./dist/client"),
     filename: "[name].js",
-    publicPath:'/client/'
+    publicPath: '/client/'
   },
   module: {
     rules: [
       { test: /\.js$/, loader: "babel-loader", exclude: /node_modules/ },
       { test: /\.css$/, loader: "css-loader" },
-      { test: /\.(scss|sass)$/, use: ["css-loader", "sass-loader"] }
+      {
+        test: /\.(scss|sass)$/, use: [
+          { loader: MiniCssExtractPlugin.loader, options: { hmr: isHMR } },
+          "css-loader",
+          "sass-loader"
+        ]
+      }
     ]
   },
   devtool: "source-map",
@@ -35,7 +43,11 @@ module.exports = {
       inject: false,
       filename: '../index.html'
     }),
-    new LoadablePlugin()
+    new LoadablePlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: 'chunk.[name].css',
+    }),
   ]
 };
 

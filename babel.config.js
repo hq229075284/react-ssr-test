@@ -1,5 +1,5 @@
 module.exports={
-    plugins:["@loadable/babel-plugin"],
+    plugins:["@loadable/babel-plugin"],// `client` and `server` must need
     presets:[
         "@babel/preset-react",
         ["@babel/preset-env",{
