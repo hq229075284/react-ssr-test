@@ -9,7 +9,7 @@ const isHMR = NODE_ENV !== 'production'
 module.exports = {
   mode: "development",
   entry: {
-    index: path.join(__dirname, "./src/entry-client.js")
+    index: [path.join(__dirname, "./src/entry-client.js")]
   },
   output: {
     path: path.join(__dirname, "./dist/client"),
