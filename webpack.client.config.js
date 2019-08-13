@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { NODE_ENV } = process.env;
@@ -9,6 +10,7 @@ const isHMR = NODE_ENV !== 'production'
 module.exports = {
   mode: "development",
   entry: {
+    // index: ["webpack-hot-middleware/client", path.join(__dirname, "./src/entry-client.js")]
     index: [path.join(__dirname, "./src/entry-client.js")]
   },
   output: {
@@ -38,6 +40,7 @@ module.exports = {
     new CleanWebpackPlugin({
       verbose: true
     }),
+    // ...(isHMR ? [new webpack.HotModuleReplacementPlugin()] : []),
     new htmlWebpackPlugin({
       template: path.join(__dirname, "./index.html"),
       inject: false,

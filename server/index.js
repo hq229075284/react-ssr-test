@@ -16,24 +16,37 @@ const _res = (context) => ({
   },
   getHeader: context.get.bind(context),
   setHeader: context.set.bind(context),
+  // writeHead: context.writeHead.bind(context),
+  // write: context.write.bind(context),
 })
 
 let serverMiddleware, koaServerMiddleware, clientFs = fs
-if (__DEV__) {
-  const webpack = require('webpack')
-  const webpackDevMiddleware = require('webpack-dev-middleware')
-  const MemoryFileSystem = require("memory-fs");
-  const clientCompiler = webpack(require('../webpack.client.config.js'))
-  clientFs = new MemoryFileSystem();
-  // clientCompiler.outputFileSystem = clientFs
-  const clientMiddleware = webpackDevMiddleware(clientCompiler, { fs: clientFs, publicPath: '/client/' })
-  koaClientMiddleware = async (ctx, next) => { await clientMiddleware(ctx.req, _res(ctx), next) }
 
-  const serverCompiler = webpack(require('../webpack.server.config.js'))
-  // const serverFs = new MemoryFileSystem();
-  // serverCompiler.outputFileSystem = serverFs
-  const serverMiddleware = webpackDevMiddleware(serverCompiler, { index: false, writeToDisk: true })
-  koaServerMiddleware = async (ctx, next) => { await serverMiddleware(ctx.req, _res(ctx), next) }
+async function prepare(){
+  if (__DEV__) {
+    const webpack = require('webpack')
+    const webpackDevMiddleware = require('webpack-dev-middleware')
+    const MemoryFileSystem = require("memory-fs");
+    const webpackHotMiddleware = require("webpack-hot-middleware")
+    const webpackHotClient = require("webpack-hot-client")
+    const clientCompiler = webpack(require('../webpack.client.config.js'))
+    
+    await new Promise(resolve => {
+      const _client = webpackHotClient(clientCompiler, {})
+      _client.server.on('listening', () => { resolve() })
+    })
+    
+    clientFs = new MemoryFileSystem();
+    // clientCompiler.outputFileSystem = clientFs
+    const clientMiddleware = webpackDevMiddleware(clientCompiler, { fs: clientFs, publicPath: '/client/' })
+    koaClientMiddleware = async (ctx, next) => { await clientMiddleware(ctx.req, _res(ctx), next) }
+  
+    const serverCompiler = webpack(require('../webpack.server.config.js'))
+    // const serverFs = new MemoryFileSystem();
+    // serverCompiler.outputFileSystem = serverFs
+    const serverMiddleware = webpackDevMiddleware(serverCompiler, { index: false, writeToDisk: true })
+    koaServerMiddleware = async (ctx, next) => { await serverMiddleware(ctx.req, _res(ctx), next) }
+  }
 }
 
 function startup({ PORT = 8080 } = {}) {
@@ -129,4 +142,4 @@ async function provideHtml(ctx) {
   ctx.body = html
 }
 
-startup()
+prepare().then(startup)
