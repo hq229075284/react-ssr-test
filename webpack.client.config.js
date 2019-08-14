@@ -11,7 +11,7 @@ module.exports = {
   mode: "development",
   entry: {
     // index: ["webpack-hot-middleware/client", path.join(__dirname, "./src/entry-client.js")]
-    index: [path.join(__dirname, "./src/entry-client.js")]
+    index: ["mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js",path.join(__dirname, "./src/entry-client.js")]
   },
   output: {
     path: path.join(__dirname, "./dist/client"),
@@ -24,14 +24,14 @@ module.exports = {
       { test: /\.css$/, loader: "css-loader" },
       {
         test: /\.(scss|sass)$/, use: [
-          { loader: MiniCssExtractPlugin.loader, options: { hmr: isHMR } },
+          { loader: MiniCssExtractPlugin.loader, options: { hmr: isHMR, reloadAll: true } },
           "css-loader",
           "sass-loader"
         ]
       }
     ]
   },
-  devtool: "source-map",
+  devtool: "hidden-source-map",
   devServer: {
     host: "0.0.0.0",
     port: 3000

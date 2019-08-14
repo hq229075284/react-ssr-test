@@ -27,7 +27,7 @@ module.exports = {
       // options: { ...require('./babel.config'), plugins: ["@loadable/babel-plugin"], }
     },{
       test: /\.(scss|sass)$/, use: [
-        { loader: MiniCssExtractPlugin.loader, options: { hmr: isHMR } },
+        { loader: MiniCssExtractPlugin.loader },
         "css-loader",
         "sass-loader"
       ]
