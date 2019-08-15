@@ -41,6 +41,7 @@ module.exports = {
     new CleanWebpackPlugin({
       verbose: true
     }),
+    // 单独打包时手动添加下一行，热更新时注释掉
     // ...(isHMR ? [new webpack.HotModuleReplacementPlugin()] : []),
     new htmlWebpackPlugin({
       template: path.join(__dirname, "./index.html"),
