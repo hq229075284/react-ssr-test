@@ -11,7 +11,8 @@ module.exports = {
   mode: "development",
   entry: {
     // index: ["webpack-hot-middleware/client", path.join(__dirname, "./src/entry-client.js")]
-    index: ["mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js",path.join(__dirname, "./src/entry-client.js")]
+    // index: ["mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js",path.join(__dirname, "./src/entry-client.js")]
+    index: [path.join(__dirname, "./src/entry-client.js")]
   },
   output: {
     path: path.join(__dirname, "./dist/client"),
@@ -32,10 +33,10 @@ module.exports = {
     ]
   },
   devtool: "hidden-source-map",
-  devServer: {
-    host: "0.0.0.0",
-    port: 3000
-  },
+  // devServer: {
+  //   host: "0.0.0.0",
+  //   port: 3000
+  // },
   plugins: [
     new CleanWebpackPlugin({
       verbose: true

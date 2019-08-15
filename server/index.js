@@ -114,8 +114,11 @@ async function provideHtml(ctx) {
 
   // const modules = []
 
+  const dist = getDist()
+  
   const nodeExtractor = new ChunkExtractor({
-    stats: require('../dist/server/loadable-stats.json'),
+    // stats: require('../dist/server/loadable-stats.json'),
+    stats: JSON.parse(clientFs.readFileSync(path.join(dist,'client/loadable-stats.json'),'utf-8')),
     entrypoints: 'index',
     publicPath: '/client/'
   })
@@ -129,7 +132,6 @@ async function provideHtml(ctx) {
 
   const jsx = nodeExtractor.collectChunks(React.createElement(Adapter, { store, req: ctx.req }, null))
 
-  const dist = getDist()
   let html = clientFs.readFileSync(path.resolve(dist, './index.html'), "utf-8")
   html = html
     .replace('<!-- reactComponents -->', ReactDOMServer.renderToString(jsx))
