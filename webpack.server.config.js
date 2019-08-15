@@ -39,10 +39,10 @@ module.exports = {
     new CleanWebpackPlugin({
       verbose: true
     }),
-    new LoadablePlugin({
-      // filename:'../loadable-stats.json',
-      // writeToDisk:true
-    }),
+    // new LoadablePlugin({
+    //   // filename:'../loadable-stats.json',
+    //   // writeToDisk:true
+    // }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: 'chunk.[name].css',
